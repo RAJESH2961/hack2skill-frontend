@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        button { margin: 5px; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Authentication Flow Test</h1>
+    
+    <div class="test-section">
+        <h3>Current Authentication Status</h3>
+        <p id="auth-status">Checking...</p>
+        <button onclick="checkAuth()">Check Auth Status</button>
+    </div>
+
+    <div class="test-section">
+        <h3>Authentication Actions</h3>
+        <button onclick="login()">Simulate Login</button>
+        <button onclick="logout()">Simulate Logout</button>
+        <button onclick="logoutWithRedirect()">Logout & Test Redirect</button>
+        <button onclick="clearStorage()">Clear All Storage</button>
+    </div>
+
+    <div class="test-section">
+        <h3>Route Testing (Updated with React Context)</h3>
+        <p>Open your React app and test these scenarios:</p>
+        <ul>
+            <li><strong>Root Route:</strong> Visit <code>/</code> - should redirect to <code>/login</code> if not authenticated, <code>/home</code> if authenticated</li>
+            <li><strong>Login Page:</strong> Visit <code>/login</code> - should show login form if not authenticated, redirect to <code>/home</code> if authenticated</li>
+            <li><strong>Signup Page:</strong> Visit <code>/signup</code> - should show signup form if not authenticated, redirect to <code>/home</code> if authenticated</li>
+            <li><strong>Protected Routes:</strong> Visit <code>/home</code>, <code>/dashboard</code>, <code>/about</code>, <code>/contact</code> without token - should redirect to <code>/login</code></li>
+            <li><strong>After Login:</strong> Login and then visit protected routes - should work normally</li>
+            <li><strong>After Logout:</strong> Logout and try to visit protected routes - should redirect to <code>/login</code></li>
+            <li><strong>Login/Signup Access:</strong> When logged in, try to visit <code>/login</code> or <code>/signup</code> - should redirect to <code>/home</code></li>
+            <li><strong>Immediate Updates:</strong> Login/logout should update UI immediately without page refresh</li>
+            <li><strong>Cross-tab Sync:</strong> Login/logout in one tab should update other tabs automatically</li>
+            <li><strong>Home Logout Button:</strong> There's now a logout button on the Home page that immediately logs out and redirects</li>
+        </ul>
+    </div>
+
+    <script>
+        function checkAuth() {
+            const token = localStorage.getItem('access_token');
+            const status = document.getElementById('auth-status');
+            if (token) {
+                status.innerHTML = '<span class="success">✓ Authenticated (Token: ' + token + ')</span>';
+            } else {
+                status.innerHTML = '<span class="error">✗ Not authenticated</span>';
+            }
+        }
+
+        function login() {
+            localStorage.setItem('access_token', 'dummy_access_token');
+            checkAuth();
+            alert('Login simulated! Check your React app.');
+        }
+
+        function logout() {
+            localStorage.removeItem('access_token');
+            checkAuth();
+            alert('Logout simulated! Check your React app.');
+        }
+
+        function logoutWithRedirect() {
+            localStorage.removeItem('access_token');
+            checkAuth();
+            alert('Logout simulated! You should be redirected to /login in your React app.');
+        }
+
+        function clearStorage() {
+            localStorage.clear();
+            checkAuth();
+            alert('Storage cleared! Check your React app.');
+        }
+
+        // Check auth status on page load
+        checkAuth();
+    </script>
+</body>
+</html>
